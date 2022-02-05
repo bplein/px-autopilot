@@ -13,3 +13,4 @@ spec:
   # List of namespaces to migrate
   namespaces:
   - postgres-demo
+  

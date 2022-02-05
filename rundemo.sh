@@ -18,15 +18,17 @@ run "kubectl config set-context --current --namespace=$namespace"
 
 desc "Now lets configure and enable Autopilot"
 run "cat autopilot-configmap.yaml"
-run "kubectl -n kube-system create -f autopilot-configmap.yaml"
+desc ""
+desc "This ConfigMap is already running, but let's patch it to run every 2 seconds instead of 10, just for this demo"
+#run "kubectl -n portworx apply -f autopilot-configmap.yaml"
+run "kubectl -n portworx patch configmap autopilot-config --type=merge --patch '{"data":{"config.yaml":"providers:\n   - name: default\n     type: prometheus\n     params: url=http://px-prometheus:9090\nmin_poll_interval: 2"}}'"
+
 
 desc "Let's look at the Autopilot rule we are going to use for our application"
 run "cat grow-pvc-rule.yaml"
+run "kubectl -n portworx create -f grow-pvc-rule.yaml"
 
-desc ""
-desc "Our rule requires that we lable the namespace, let's do that"
-run "kubectl label namespaces $namespace type=db --overwrite=true"
-desc ""
+
 desc "Let's create a storage class for our application."
 desc "Storage classes allow Kubernetes to tell the underlying volume driver how to set up the volumes for capabilites such as IO profiles, HA levels, etc."
 run "cat px-repl3-sc-demotemp.yaml"
@@ -51,6 +53,11 @@ watch kubectl get pods -l app=postgres -o wide
 #clear the screen
 clear
 
+desc ""
+desc "Our rule requires that we lable the namespace and any volume we want to watch, let's do that"
+run "kubectl label namespaces $namespace type=db --overwrite=true"
+run "kubectl -n $namespace label pvc px-postgres-pvc app=postgres --overwrite=true"
+desc ""
 
 desc ""
 desc "We are going to exec into the Postgres pod and run a command to populate data, and then get the count"
@@ -83,7 +90,7 @@ select count(*) from pgbench_accounts;
 \q
 EOF"
 ##########
-
+watch kubectl get pvc -n postgres-demo
 
 
 
