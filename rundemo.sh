@@ -21,7 +21,8 @@ run "cat autopilot-configmap.yaml"
 desc ""
 desc "This ConfigMap is already running, but let's patch it to run every 2 seconds instead of 10, just for this demo"
 #run "kubectl -n portworx apply -f autopilot-configmap.yaml"
-run "kubectl -n portworx patch configmap autopilot-config --type=merge --patch '{"data":{"config.yaml":"providers:\n   - name: default\n     type: prometheus\n     params: url=http://px-prometheus:9090\nmin_poll_interval: 2"}}'"
+run ""
+kubectl -n portworx patch configmap autopilot-config --type=merge --patch '{"data":{"config.yaml":"providers:\n   - name: default\n     type: prometheus\n     params: url=http://px-prometheus:9090\nmin_poll_interval: 2"}}'
 
 
 desc "Let's look at the Autopilot rule we are going to use for our application"
