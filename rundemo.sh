@@ -53,7 +53,7 @@ watch kubectl -n $namespace get pods -l app=postgres -o wide
 clear
 
 desc ""
-desc "Our rule requires that we lable the namespace and any volume we want to watch, let's do that"
+desc "Our rule requires that we label the namespace and any volume we want to watch, let's do that"
 run "kubectl label namespaces $namespace type=db --overwrite=true"
 run "kubectl -n $namespace label pvc px-postgres-pvc app=postgres --overwrite=true"
 desc ""
