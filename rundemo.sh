@@ -14,11 +14,10 @@ desc "First lets create a namespace to run our application"
 run "kubectl create ns $namespace"
 
 
-desc "Now lets configure and enable Autopilot"
-run "cat autopilot-configmap.yaml"
+desc "Now lets look at AutoPilot's configmap"
+run "kubectl -n portworx get configmaps autopilot-config -o yaml | more"
 desc ""
 desc "This ConfigMap is already running, but let's patch it to run every 2 seconds instead of 10, just for this demo"
-#run "kubectl -n portworx apply -f autopilot-configmap.yaml"
 run ""
 kubectl -n portworx patch configmap autopilot-config --type=merge --patch '{"data":{"config.yaml":"providers:\n   - name: default\n     type: prometheus\n     params: url=http://px-prometheus:9090\nmin_poll_interval: 2"}}'
 
