@@ -8,7 +8,7 @@ if ! type "pv" > /dev/null; then
 fi
 source ./util.sh
 
-export namespace=postgres-demo
+export namespace=autopilot-demo
 desc ""
 desc "First lets create a namespace to run our application"
 run "kubectl create ns $namespace"
@@ -88,7 +88,7 @@ select count(*) from pgbench_accounts;
 \q
 EOF"
 ##########
-watch kubectl -n $namespace get pvc -n postgres-demo
-
+desc "Now that there's over 50% capacity utilization, let's watch the PVC grow online"
+watch kubectl -n $namespace get pod,pvc
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export namespace=postgres-demo
+export namespace=autopilot-demo
 
 echo "========================================================"
 echo "This will destroy everything in namespace $namespace!!!!"

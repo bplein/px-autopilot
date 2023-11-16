@@ -13,7 +13,7 @@ spec:
       type: db
   ##### conditions are the symptoms to evaluate. All conditions are AND'ed
   conditions:
-    # volume usage should be less than 70%
+    # If volume usage exceeds 50% of capacity
     expressions:
     - key: "100 * (px_volume_usage_bytes / px_volume_capacity_bytes)"
       operator: Gt
